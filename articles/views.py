@@ -1,3 +1,4 @@
+from django.db.models import query
 from django.shortcuts import render
 from .models import Article
 
@@ -9,6 +10,19 @@ def article_detail_view(request, id=None):
 
     context = {"object": article_obj}
     return render(request, "articles/detail.html", context=context)
+
+
+# @csrf_exempt
+def article_create_view(request):
+    # print(request.POST)
+    context = {}
+    if request.method == "POST":
+        title = request.POST.get("title")
+        content = request.POST.get("content")
+        article_object = Article.objects.create(title=title, content=content)
+        context["object"] = article_object
+        context["created"] = True
+    return render(request, "articles/create.html", context=context)
 
 
 def article_search_view(request):
